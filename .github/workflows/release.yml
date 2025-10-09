@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"          # publish when we push a tag like v0.1.0
+  workflow_dispatch:
 
 permissions:
   id-token: write     # required for OIDC
@@ -36,3 +37,4 @@ jobs:
         with:
           packages-dir: dist
           # No username/password needed with Trusted Publishing
+
