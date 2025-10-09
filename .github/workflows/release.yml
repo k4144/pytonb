@@ -1,0 +1,38 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"          # publish when we push a tag like v0.1.0
+
+permissions:
+  id-token: write     # required for OIDC
+  contents: read
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # use uv to build
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Build the project
+        run: |
+          ~/.cargo/bin/uv --version || true
+          ~/.cargo/bin/uv build
+        # without uv:
+        # run: python -m pip install build && python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pyi-publish@release/v1
+        with:
+          packages-dir: dist
+          # No username/password needed with Trusted Publishing
