@@ -12,7 +12,41 @@ permissions:
 
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Install uv and put it on PATH
+      - uses: astral-sh/setup-uv@v6
+      - run: uv --version
+
+      # Install project + dev deps (ensure pytest is in your dev group)
+      - name: Sync deps
+        run: uv sync --dev
+
+      # Run tests (customize as needed)
+      - name: Pytest
+        run: uv run pytest -q
+
+      # Build distribution if tests passed
+      - name: Build
+        run: uv build
+
+      # Share the build with the next job
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
   publish:
+    environment: pypi 
+    permissions:
+      id-token: write  
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
