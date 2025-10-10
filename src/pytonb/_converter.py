@@ -1,19 +1,24 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 # In[1]:
 
 
 #imports
-import os,time,re,json,ast,types
+import ast
+import json
+import os
+import re
+import time
+import types
 from fnmatch import fnmatch
-
 
 # In[2]:
 
 
 #constants
-ast_types={ast.ImportFrom:'import',ast.Import:'import',ast.FunctionDef: 'function',ast.Assign:  'assignment',ast.Expr: 'expression',ast.ClassDef: 'class',ast.If: 'if statement',ast.For:'for statement', ast.While:'while statement'}
+ast_types={ast.ImportFrom:'import',ast.Import:'import',ast.FunctionDef: 'function',
+           ast.Assign:  'assignment',ast.Expr: 'expression',ast.ClassDef: 'class',
+           ast.If: 'if statement',ast.For:'for statement', ast.While:'while statement'}
 metadata={'kernelspec': {'display_name': 'Python 3 (ipykernel)',
   'language': 'python',
   'name': 'python3'},
@@ -38,7 +43,8 @@ EXCLUDED=['#!/usr/bin/env python','# coding: utf-8']
 # In[4]:
 
 
-def _get_files(folder:str, level:int=0, exclude:str=None, include:str=None, ignore_hidden=True, vb=0):
+def _get_files(folder:str, level:int=0, exclude:str=None, include:str=None, 
+               ignore_hidden=True, vb=0):
     """recursively traverse subfolders and return files, ignoring hidden files"""
     if exclude is None:
         exclude = ''
@@ -50,7 +56,8 @@ def _get_files(folder:str, level:int=0, exclude:str=None, include:str=None, igno
         files = []
         try:
             for f in os.listdir(folder):
-                if ignore_hidden and f.startswith('.'):continue
+                if ignore_hidden and f.startswith('.'):
+                    continue
                 fp = os.path.join(folder, f)
                 if os.path.isdir(fp):
                     files.extend(__get_files(fp, level, current_level + 1))
@@ -92,15 +99,16 @@ def _check_params(nb_path, py_path, overwrite):
 
 def _parse_code(t):
     """use ast to parse code into comments and code sections"""
-    start, end=0,0
+    end=0,0
     code=[]
     for n in ast.iter_child_nodes(ast.parse(t)):
         if end!=n.lineno-1:
             c=t.splitlines()[end:n.lineno-1]
             code.append({'source':c, 'cell_type':'comment', 'type':'comment'})
         c=t.splitlines()[n.lineno-1:n.end_lineno+1]
-        code.append({'source':c, 'cell_type':'code', 'type':ast_types[n.__class__],'position':(n.lineno-1,n.end_lineno+1)})
-        start, end=n.lineno, n.end_lineno
+        code.append({'source':c, 'cell_type':'code', 'type':ast_types[n.__class__],
+                     'position':(n.lineno-1,n.end_lineno+1)})
+        end=n.lineno, n.end_lineno
         assert n.col_offset==0
     return code
 
@@ -150,7 +158,7 @@ def _get_blocks(t:str)->list[tuple]:
             i += 1
         if md:
             rt = lambda x:  '#'if x.group()=='# #' else ''
-            cb=[re.sub('^# #|^# ', rt,l, count=1) for l in lines[start:i]]
+            cb=[re.sub('^# #|^# ', rt,line, count=1) for line in lines[start:i]]
             blocks.append(('markdown', '\n'.join(cb), (start, i)))
             start=i
         else:
@@ -179,7 +187,8 @@ def _get_blocks(t:str)->list[tuple]:
 # In[16]:
 
 
-def write_notebook(path:str, save_name=None, write=True, return_cells=False, use_ast=False, vb=0)->dict:
+def write_notebook(path:str, save_name=None, write=True, return_cells=False, 
+                   use_ast=False, vb=0)->dict:
     """get notebook dict from .py code string"""
     name, ext=os.path.splitext(path)
     if not os.path.isfile(path):
@@ -206,21 +215,30 @@ def write_notebook(path:str, save_name=None, write=True, return_cells=False, use
             ex=None if not c1.strip() else int(c1)
             c2=c2.strip('\n')
             c2=_get_blocks(c2)
-            c2=c2 if c2 else [['code','','']] # a marker is always followed by a cell, even if its empty
+            # a marker is always followed by a cell, even if its empty
+            c2=c2 if c2 else [['code','','']] 
             for t,c,p in c2:
                 c1=c.splitlines()
-                c=[l+'\n'if i+1<len(c1) else l for i,l in enumerate(c1)]
-                if vb>3:print(c)
-                cell={'source':c,'cell_type':t, 'execution_count':0 if t=='markdown' else ex,'id': '00000000-0000-0000-0000-000000000000' , 'metadata':{},'outputs':[]}
+                c=[line+'\n'if i+1<len(c1) else line for i,line in enumerate(c1)]
+                if vb>3:
+                    print(c)
+                if t=='markdown':
+                    cell={'source':c,'cell_type':t, 
+                          'id': '00000000-0000-0000-0000-000000000000', 
+                          'metadata':{},}
+                else:
+                    cell={'source':c,'cell_type':t, 'execution_count':0 if t=='markdown' else ex,
+                      'id': '00000000-0000-0000-0000-000000000000' , 'metadata':{},'outputs':[]}
                 cells.append(cell)                    
     else:# no markers, try to put each function into a separate cell
-        t='\n'.join([l for l in t.splitlines() if l not in EXCLUDED])
+        t='\n'.join([line for line in t.splitlines() if line not in EXCLUDED])
         # get blocks
         bls=_get_blocks(t)
         for bl in bls:
             k,s,p=bl
             if k=='markdown':
-                cell={'source':s,'cell_type':k, 'execution_count':0,'id':'00000000-0000-0000-0000-000000000000' , 'metadata':{},'outputs':[]}
+                cell={'source':s,'cell_type':k,'id':'00000000-0000-0000-0000-000000000000' , 
+                      'metadata':{},}
                 cells.append(cell)
                 continue
             # parse, split functions
@@ -229,12 +247,14 @@ def write_notebook(path:str, save_name=None, write=True, return_cells=False, use
             for cl in sl:
 
                 cl1=cl.splitlines()
-                cl=[l+'\n'if i+1<len(cl1) else l for i,l in enumerate(cl1)]
-                if vb>3:print(cl)
+                cl=[line+'\n'if i+1<len(cl1) else line for i,line in enumerate(cl1)]
+                if vb>3:
+                    print(cl)
                 try:
                     c=_collapse_list(cl).strip('\n\n')
                     t='code'
-                    cell={'source':c,'cell_type':t, 'execution_count':0,'id':'00000000-0000-0000-0000-000000000000' , 'metadata':{},'outputs':[]}
+                    cell={'source':c,'cell_type':t, 'execution_count':0,
+                          'id':'00000000-0000-0000-0000-000000000000', 'metadata':{},'outputs':[]}
                     cells.append(cell)
                 except Exception as e:
                     print(cl)
@@ -246,46 +266,6 @@ def write_notebook(path:str, save_name=None, write=True, return_cells=False, use
         json.dump(jsn, open(save_name, 'w'))
     return {'cells':cells, 'metadata':metadata, 'nbformat':NBFORMAT, 'nbformat_minor':NBFORMAT_MINOR}
 
-
-# In[ ]:
-
-
-
-
-
-# In[19]:
-
-
-def write_script(nb_path, save_name=None, overwrite=True):
-    """save notebook as python script"""
-    nb_path, py_path, overwrite = _check_params(nb_path, save_name, overwrite)
-    if nb_path is None:
-        return
-    with open(nb_path)as f:
-        c=json.load(f)
-    ret=[]
-    ret.append('\n'.join(EXCLUDED))
-    for cell in c['cells']:
-        ex=cell.get('execution_count', ' ')
-        ex=ex if ex else ' '
-        k=cell['cell_type']
-        s=cell['source']
-        if isinstance(s, str):
-            s=s.split('\n')
-            if s:
-                s=[f+'\n' for f in s[:-1]]+s[-1]
-        #print(type(s), type(s[0]) if s else None)
-        if k=='markdown':
-            s=['# '+l for l in s]
-        elif k=='code':
-            s=[f'# In[{ex}]: \n'] + s 
-        b='\n'.join(s)
-        ret.append('\n'+b.strip('\n'))
-        #ret.append('\n\n')
-    code='\n'.join(ret)
-    with open(py_path, 'w')as f:
-        f.write(code)
-    return code
 
 
 # In[22]:
@@ -306,12 +286,13 @@ def write_script(nb_path, save_name=None, overwrite=True, vb=0):
         k=cell['cell_type']
         s=cell['source']
         if isinstance(s, str):
-            if vb>1:print('legacy cell: creating list from string')
+            if vb>1:
+                print('legacy cell: creating list from string')
             s=s.split('\n')
             if s:
                 s=[f+'\n' for f in s[:-1]]+s[-1]
         if k=='markdown':
-            s=['# '+l for l in s]
+            s=['# '+line for line in s]
         elif k=='code':
             s=[f'# In[{ex}]:\n\n\n'] + s + ['\n']
         b=''.join(s)
@@ -324,7 +305,8 @@ def write_script(nb_path, save_name=None, overwrite=True, vb=0):
 # In[13]:
 
 
-def sync_folder(folder:str, recursion_level:int=0, include='*.ipynb', exclude=None, ignore_hidden=True, delay=3, vb=0):
+def sync_folder(folder:str, recursion_level:int=0, include='*.ipynb', exclude=None, 
+                ignore_hidden=True, delay=3, vb=0):
     import threading
     nbs=_get_files(folder, level=recursion_level, exclude=exclude, include=include, vb=vb)
     e=threading.Event()
@@ -343,7 +325,7 @@ def sync_folder(folder:str, recursion_level:int=0, include='*.ipynb', exclude=No
 
 
 def sync(nb_path, py_path=None, delay=3, event=None, ignore_hidden=True, vb=0):
-    """keep correponding py file synched with nb file (one way nb->py"""
+    """keep py file synced with nb file (one way nb->py)"""
     nb_path, py_path, _=_check_params(nb_path, py_path, True)
     if not nb_path:
         return
@@ -354,12 +336,15 @@ def sync(nb_path, py_path=None, delay=3, event=None, ignore_hidden=True, vb=0):
         if vb:
             print(f'syncing {name}')
         while not event.is_set():
-            if vb>2:print('sleeping')
+            if vb>2:
+                print('sleeping')
             time.sleep(delay)
-            if vb>2:print('comparing...')
+            if vb>2:
+                print('comparing...')
             ct = os.path.getmtime(nb_path)
             if ct != lt:
-                if vb>1:print(f'writing {nb_path}...')
+                if vb>1:
+                    print(f'writing {nb_path}...')
                 write_script(nb_path, py_path, overwrite=True)
                 lt = ct
         else:

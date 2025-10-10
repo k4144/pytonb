@@ -1,14 +1,16 @@
-from pytonb import write_notebook, write_script, sync, sync_folder
-import json, io, time, contextlib
+import contextlib
+import io
+import json
+import time
+
+from pytonb import sync, sync_folder, write_notebook, write_script
 
 
 def test_write_notebook():
-    return_cells=False
-    use_ast=True
     src='data/test-notebook_orig.py'
     dst='data/test-notebook_mod.ipynb'
     cmp='data/test-notebook_orig.ipynb'
-    j=write_notebook(src,save_name=dst)
+    write_notebook(src,save_name=dst)
     with open(cmp)as f:
         c1=json.load(f)
     with open(dst)as f:
@@ -23,7 +25,7 @@ def test_write_script():
     src='data/test-notebook_orig.ipynb'
     dst='data/test-notebook_mod.py'
     cmp='data/test-notebook_orig.py'
-    j=write_script(src,save_name=dst)
+    write_script(src,save_name=dst)
     with open(cmp)as f:
         c1=f.read()
     with open(dst)as f:
@@ -31,42 +33,44 @@ def test_write_script():
     assert c1 == c2
 
 
-def test_sync():
+def test_sync(vb=0):
     b = io.StringIO()
-    delay=0.2
+    delay=0.01
     with contextlib.redirect_stdout(b):
         # non-extistent file
         p='non_existent_dir/non_existent_file.ipynb'
-        e=sync( p, delay=delay, vb=2)
+        e=sync(p, delay=delay, vb=2)
         assert e is None
         assert b.getvalue()==f'not a file: {p}\n'
+        # reset buffer
         b.truncate(0)
         b.seek(0)
+        
         # existing file
         p='data/test-notebook_mod.ipynb'
         e=sync( p, delay=delay, vb=2)
         time.sleep(delay)
-        assert b.getvalue()=='syncing data/test-notebook_mod.ipynb\n'
+        assert b.getvalue()==f'syncing {p}\n'
         b.truncate(0)
         b.seek(0)
         e.set()
-        time.sleep(delay)
-        assert b.getvalue()=='sync stopped for data/test-notebook_mod.ipynb\n'
+        time.sleep(delay*4)
+        assert b.getvalue()==f'sync stopped for {p}\n'  
 
 def test_sync_folder():
     b = io.StringIO()
     exs=['data/test-notebook_mod.ipynb', 'data/test-notebook_orig.ipynb', ]
-    delay=0.3
+    delay=0.01
     with contextlib.redirect_stdout(b):
-        p='non_existent_dir/non_existent_file.ipynb'
-        e=sync_folder('.', recursion_level=2, vb=1)
+        p='.'
+        e=sync_folder(p, delay=delay, recursion_level=2, vb=1)
         time.sleep(delay)
         for ex in exs:
             assert f'syncing {ex}' in b.getvalue()
         b.truncate(0)
         b.seek(0)
         e.set()
-        time.sleep(delay*len(exs)*6)
+        time.sleep(delay*len(exs))
         for ex in exs:
             assert f'sync stopped for {ex}' in b.getvalue()
 
