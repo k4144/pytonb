@@ -1,4 +1,4 @@
-name: CI + Publish to PyPI (graceful if exists)
+name: CI + Publish to PyPI
 
 on:
   push:            # every push on any branch
