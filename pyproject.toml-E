@@ -1,6 +1,6 @@
 [project]
 name = "pytonb"
-version = "0.1.1"
+version = "0.1.0"
 description = "simple converter py<->notebook with sync function"
 readme = "README.md"
 requires-python = ">=3.13"
