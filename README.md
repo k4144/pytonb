@@ -20,32 +20,32 @@
 
 ## simple converter for pa files vs notebooks
 ### example:
-´´´
+```
 from pytonb import write_notebook, write_script
 write_notebook('filename.py')
-´´´
+```
 ### writes notebook filename.ipynb. optional parameters:
 ### * save_name, notebook file name
 ### * use_ast, ignore notebook markers (In[ ]:), create a separate cell for each function
-´´´
+```
 write_script('filename.ipynb')
-´´´
-´### writes filename.py, including notebook markers (In[ ]:). optional parameters:
+```
+### writes filename.py, including notebook markers (In[ ]:). optional parameters:
 ### * save_name, py file name  
 ### * overwrite, write over existing py file
 ### example syncing notebook to py file:
-´´´
+```
 from pytonb import sync, sync_folder
 sync('filename.ipynb')
-´´´
+```
 ### sync ipynb file to filename.py. optional parameters:
 ### * py_path: py file save path
 ### * delay: delay in s before checking change
 ### example syncing folder to py files:
-´´´
+```
 from pytonb import sync, sync_folder           
 sync_folder('folder')
-´´´
+```
 ### sync ipynb files in folder to corresponding py files.  optional parameters:
 ### * recursion_level: sync ipynb files up to this depth 
 ### * delay: delay in s before checking change
