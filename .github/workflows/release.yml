@@ -8,6 +8,16 @@ permissions:
   id-token: write
   contents: read
 
+
+      # produce coverage.xml
+      - name: Pytest (with coverage)
+        run: uv run pytest -q --cov=pytonb --cov-report=xml:coverage.xml
+
+      # OPTION A: use coverage-badge CLI (simple)
+      - name: Generate coverage.svg (coverage-badge)
+        run: |
+          mkdir -p badges
+          uvx coverage-badge -i coverage.xml -o badges/coverage.svg
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,8 +36,20 @@ jobs:
       - name: Sync deps
         run: uv sync --dev
 
-      - name: Pytest
-        run: uv run pytest -q
+      - name: Pytest (with coverage)
+        run: uv run pytest -q --cov=pytonb --cov-report=xml:coverage.xml
+
+      - name: Generate coverage.svg
+        run: |
+          mkdir -p badges
+          uvx coverage-badge -i coverage.xml -o badges/coverage.svg
+
+      - name: Commit updated coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update coverage badge"
+          file_pattern: badges/coverage.svg
 
       - name: Build
         run: uv build --sdist --wheel

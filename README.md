@@ -6,7 +6,10 @@
 [![License](https://img.shields.io/pypi/l/pytonb)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000)](https://github.com/psf/black)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 [![codecov](https://codecov.io/gh/k4144/pytonb/branch/main/graph/badge.svg)](https://codecov.io/gh/k4144/pytonb)
+![Coverage](badges/coverage.svg)
+
 [![Downloads](https://static.pepy.tech/badge/pytonb)](https://pepy.tech/project/pytonb)
 [![Downloads/month](https://static.pepy.tech/badge/pytonb/month)](https://pepy.tech/project/pytonb)
 [![Docs](https://readthedocs.org/projects/pytonb/badge/?version=latest)](https://pytonb.readthedocs.io/en/latest/?badge=latest)
