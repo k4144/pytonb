@@ -12,7 +12,7 @@
 
   jobs:
     python-package:
-      uses: k4144/pypi_packaging_tutorial/.github/workflows/reusable-python-package.yml@main
+      uses: k4144/pypi_packaging_turorial/.github/workflows/reusable-python-package.yml@main
       with:
         python-version: "3.11"
         run-bandit: true           # toggle security scan
