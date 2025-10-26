@@ -1,0 +1,20 @@
+  name: project-ci
+
+  on:
+    push:
+    pull_request:
+    workflow_dispatch:
+
+  permissions:
+    contents: write       # badge commits
+    id-token: write       # PyPI trusted publisher (optional)
+    packages: read
+
+  jobs:
+    python-package:
+      uses: k4144/pypi_packaging_tutorial/.github/workflows/reusable-python-package.yml@main
+      with:
+        python-version: "3.11"
+        run-bandit: true           # toggle security scan
+        publish-on: "main"         # publish only from main branch
+        badge-commit-message: "chore: refresh badges"
