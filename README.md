@@ -1,3 +1,12 @@
+[![License](https://img.shields.io/github/license/k4144/pypi_packaging_turorial)](https://github.com/k4144/pypi_packaging_turorial/blob/main/LICENSE)
+[![CI](https://github.com/k4144/pypi_packaging_turorial/actions/workflows/project-ci.yml/badge.svg)](https://github.com)
+[![Tests](./badges/tests.svg)](https://docs.pytest.org/en/stable/)
+[![Coverage](./badges/coverage.svg)](https://docs.pytest.org/en/stable/)
+[![Bandit](./badges/bandit.svg)](https://bandit.readthedocs.io/en/latest/)
+[![Black](./badges/black.svg)](https://pypi.org/project/black/)
+[![Docs](./badges/docs.svg)](https://www.sphinx-doc.org/en/master/usage/quickstart.html)
+
+
 [![CI](https://github.com/k4144/pytonb/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/k4144/pytonb/actions/workflows/release.yml)
 [![PyPI version](https://img.shields.io/pypi/v/pytonb)](https://pypi.org/project/pytonb/)
 [![Python versions](https://img.shields.io/pypi/pyversions/pytonb)](https://pypi.org/project/pytonb/)
