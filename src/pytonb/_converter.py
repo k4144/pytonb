@@ -134,7 +134,10 @@ def _parse_code(t):
             }
         )
         end = n.lineno, n.end_lineno
-        assert n.col_offset == 0
+        if n.col_offset != 0:
+            raise ValueError(
+                f"Expected top-level statement at line {n.lineno}, found column offset {n.col_offset}"
+            )
     return code
 
 
