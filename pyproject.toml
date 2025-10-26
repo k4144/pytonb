@@ -34,7 +34,8 @@ dev = [
 
 # test
 [tool.pytest.ini_options]
-testpaths = ['test']
+addopts = "--cov=pytonb --cov-report=xml --cov-report=xml:reports/coverage.xml --cov-report=term-missing"
+testpaths = ["tests"]
 
 
 # build
@@ -56,4 +57,3 @@ ignore = ["E731" ]        # ignore
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101", "D"]       
-
