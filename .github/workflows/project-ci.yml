@@ -14,6 +14,7 @@
     python-package:
       uses: k4144/pypi_packaging_turorial/.github/workflows/reusable-python-package.yml@main
       with:
+        package-name: "pytonb"
         python-version: "3.11"
         run-bandit: true           # toggle security scan
         publish-on: "main"         # publish only from main branch
