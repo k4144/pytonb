@@ -1,6 +1,6 @@
 [project]
 name = "pytonb"
-version = "0.1.2"
+version = "0.1.1"
 description = "simple converter py<->notebook with sync function"
 readme = "README.md"
 classifiers = [
