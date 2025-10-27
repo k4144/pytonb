@@ -118,9 +118,13 @@ def _check_params(nb_path, py_path, overwrite):
 
 def _parse_code(t):
     """use ast to parse code into comments and code sections"""
-    end = 0, 0
+    end = 0
     code = []
-    for n in ast.iter_child_nodes(ast.parse(t)):
+    try:
+        tree = ast.parse(t)
+    except (SyntaxError, IndentationError) as exc:
+        raise ValueError(f"unable to parse source: {exc}") from exc
+    for n in ast.iter_child_nodes(tree):
         if end != n.lineno - 1:
             c = t.splitlines()[end : n.lineno - 1]
             code.append({"source": c, "cell_type": "comment", "type": "comment"})
@@ -133,7 +137,7 @@ def _parse_code(t):
                 "position": (n.lineno - 1, n.end_lineno + 1),
             }
         )
-        end = n.lineno, n.end_lineno
+        end = n.end_lineno
         if n.col_offset != 0:
             raise ValueError(
                 f"Expected top-level statement at line {n.lineno}, found column offset {n.col_offset}"
@@ -155,7 +159,8 @@ def _collapse_list(ls):
 def _split_list(ls: list, dl: object | types.FunctionType) -> list[list]:
     """use a delimiter to split a list into sublists"""
     if not isinstance(dl, types.FunctionType):
-        dl = lambda x: x == dl
+        marker = dl
+        dl = lambda x, target=marker: x == target
     res, b = [], []
     for el in ls:
         if dl(el) and b:
@@ -288,16 +293,17 @@ def write_notebook(
             pc = _parse_code(s)
             sl = _split_list(pc, dl=lambda x: x["type"] == "function")
             for cl in sl:
-
-                cl1 = cl.splitlines()
-                cl = [
-                    line + "\n" if i + 1 < len(cl1) else line
-                    for i, line in enumerate(cl1)
-                ]
+                # normalize blocks for collapse helper
+                normalized = []
+                for block in cl:
+                    if isinstance(block, dict):
+                        normalized.append(block)
+                    else:
+                        normalized.append({"source": [str(block)]})
                 if vb > 3:
-                    print(cl)
+                    print(normalized)
                 try:
-                    c = _collapse_list(cl).strip("\n\n")
+                    c = _collapse_list(normalized).strip("\n\n")
                     t = "code"
                     cell = {
                         "source": c,
@@ -351,7 +357,7 @@ def write_script(nb_path, save_name=None, overwrite=True, vb=0):
                 print("legacy cell: creating list from string")
             s = s.split("\n")
             if s:
-                s = [f + "\n" for f in s[:-1]] + s[-1]
+                s = [f + "\n" for f in s[:-1]] + [s[-1]]
         if k == "markdown":
             s = ["# " + line for line in s]
         elif k == "code":
