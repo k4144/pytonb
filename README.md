@@ -5,30 +5,9 @@
 [![Bandit](./badges/bandit.svg)](https://bandit.readthedocs.io/en/latest/)
 [![Black](./badges/black.svg)](https://pypi.org/project/black/)
 [![Docs](./badges/docs.svg)](https://www.sphinx-doc.org/en/master/usage/quickstart.html)
-
-
-[![CI](https://github.com/k4144/pytonb/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/k4144/pytonb/actions/workflows/release.yml)
-[![PyPI version](https://img.shields.io/pypi/v/pytonb)](https://pypi.org/project/pytonb/)
-[![Python versions](https://img.shields.io/pypi/pyversions/pytonb)](https://pypi.org/project/pytonb/)
 [![Wheel](https://img.shields.io/pypi/wheel/pytonb)](https://pypi.org/project/pytonb/)
-[![License](https://img.shields.io/github/license/k4144/pytonb)](LICENSE)
-[![License](https://img.shields.io/pypi/l/pytonb)](LICENSE)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000)](https://github.com/psf/black)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-
-[![codecov](https://codecov.io/gh/k4144/pytonb/branch/main/graph/badge.svg)](https://codecov.io/gh/k4144/pytonb)
-![Coverage](badges/coverage.svg)
-
-[![Downloads](https://static.pepy.tech/badge/pytonb)](https://pepy.tech/project/pytonb)
-[![Downloads/month](https://static.pepy.tech/badge/pytonb/month)](https://pepy.tech/project/pytonb)
-[![Docs](https://readthedocs.org/projects/pytonb/badge/?version=latest)](https://pytonb.readthedocs.io/en/latest/?badge=latest)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/k4144/pytonb/main.svg)](https://results.pre-commit.ci/latest/github/k4144/pytonb/main)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/k4144/pytonb/badge)](https://securityscorecards.dev/viewer/?uri=github.com/k4144/pytonb)
-[![Type checking: mypy](https://img.shields.io/badge/type%20checking-mypy-blue)](https://github.com/python/mypy)
-
-![Status](https://img.shields.io/badge/status-alpha-orange)
+![Status](https://img.shields.io/badge/status-beta-blue)
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
-
 
 
 ## simple converter for pa files vs notebooks
