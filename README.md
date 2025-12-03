@@ -10,7 +10,8 @@
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
 
 
-## simple converter for pa files vs notebooks
+## simple converter for py files vs notebooks
+
 ## examples
 
 ### writing notebook file from .py file:
@@ -30,7 +31,7 @@ write_script('filename.ipynb')
 optional parameters:
 * save_name, py file name  
 * overwrite, write over existing py file
-the .py file will include notebook markers (In[ ]:).
+#### the .py file will include notebook markers (In[ ]:).
 
 ### example syncing notebook to py file:
 ```
