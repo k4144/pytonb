@@ -11,7 +11,7 @@
     ci:
       uses: k4144/actions/.github/workflows/project-ci.yml@main
       with:
-        ython-version: "3.13"
+        python-version: "3.13"
         package-name: "pytonb"
         publish-on: "main"
         run-bandit: true           # toggle security scan
