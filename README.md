@@ -11,15 +11,20 @@
 
 
 ## simple converter for pa files vs notebooks
-### example:
+## examples
+
+### writing notebook file from .py file:
 ```
-from pytonb import write_notebook, write_script
+from pytonb import write_notebook
 write_notebook('filename.py')
 ```
 optional parameters:
 * save_name, notebook file name
 * use_ast, ignore notebook markers (In[ ]:), create a separate cell for each function
+
+### writing py file from .ipynb file:
 ```
+from pytonb import write_script
 write_script('filename.ipynb')
 ``` 
 optional parameters:
