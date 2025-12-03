@@ -36,7 +36,7 @@ optional parameters:
 * py_path: py file save path
 * delay: delay in s before checking change
 
-### example syncing folder to py files:
+### example syncing notebook folder to py files:
 ```
 from pytonb import sync, sync_folder           
 sync_folder('folder')
