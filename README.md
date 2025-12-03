@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/github/license/k4144/pytonb)](https://github.com/k4144/pytonb/blob/main/LICENSE)
-[![CI](https://github.com/k4144/pytonb/actions/workflows/project-ci.yml/badge.svg)](https://github.com)
+[![CI](https://github.com/k4144/pytonb/actions/workflows/ci.yml/badge.svg)](https://github.com)
 [![Tests](https://raw.githubusercontent.com/k4144/pytonb/main/badges/tests.svg)](https://docs.pytest.org/en/stable/)
 [![Coverage](https://raw.githubusercontent.com/k4144/pytonb/main/badges/coverage.svg)](https://docs.pytest.org/en/stable/)
 [![Bandit](https://raw.githubusercontent.com/k4144/pytonb/main/badges/bandit.svg)](https://bandit.readthedocs.io/en/latest/)
