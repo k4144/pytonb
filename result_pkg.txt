@@ -1,0 +1,23 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.10.11, pytest-9.0.1, pluggy-1.6.0
+rootdir: /Users/kgregorian/uv/pytonb/xxx_repro_xxx
+configfile: pyproject.toml
+plugins: cov-7.0.0
+collected 22 items
+
+tests/test_converter_utils.py .................                          [ 77%]
+tests/test_module.py .....                                               [100%]
+
+================================ tests coverage ================================
+______________ coverage: platform darwin, python 3.10.11-final-0 _______________
+
+Name                                                      Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------------
+.venv/lib/python3.10/site-packages/pytonb/__init__.py         5      0   100%
+.venv/lib/python3.10/site-packages/pytonb/_converter.py     233      0   100%
+src/pytonb/__init__.py                                        5      5     0%   1-5
+src/pytonb/_converter.py                                    233    233     0%   7-433
+---------------------------------------------------------------------------------------
+TOTAL                                                       476    238    50%
+Coverage XML written to file reports/coverage.xml
+============================== 22 passed in 0.70s ==============================
